@@ -62,6 +62,16 @@ struct RiskResultsView: View {
                     )
                 }
 
+                if let volcano = report.volcanoRisk {
+                    RiskCardView(
+                        title: "Volcano",
+                        icon: "mountain.2.fill",
+                        level: volcano.level,
+                        summary: volcano.summary,
+                        source: volcano.dataSource
+                    )
+                }
+
                 if let air = report.airQualityRisk {
                     RiskCardView(
                         title: "Air Quality",
@@ -116,6 +126,14 @@ struct RiskResultsView: View {
         liquefactionSusceptibility: "high",
         summary: "High liquefaction susceptibility - significant ground failure risk",
         dataSource: "WA DNR Ground Response 2007"
+    )
+    report.volcanoRisk = VolcanoRiskResult(
+        level: .low,
+        inLaharZone: false,
+        volcano: nil,
+        hazardDescription: nil,
+        summary: "Not in a mapped lahar hazard zone",
+        dataSource: "WA DNR/USGS Volcanic Hazards 2016"
     )
     report.airQualityRisk = AirQualityRiskResult(
         level: .low,

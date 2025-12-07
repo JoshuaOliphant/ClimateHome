@@ -53,7 +53,7 @@ struct ContentView: View {
                 .font(.headline)
                 .multilineTextAlignment(.center)
 
-            Text("Check flood, wildfire, earthquake, and air quality risks")
+            Text("Check flood, wildfire, earthquake, volcano, and air quality risks")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

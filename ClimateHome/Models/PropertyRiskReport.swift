@@ -12,6 +12,7 @@ struct PropertyRiskReport: Sendable {
     var floodRisk: FloodRiskResult?
     var airQualityRisk: AirQualityRiskResult?
     var earthquakeRisk: EarthquakeRiskResult?
+    var volcanoRisk: VolcanoRiskResult?
 
     var geocodingTimeMs: Int?
     var totalTimeMs: Int?
@@ -23,7 +24,8 @@ struct PropertyRiskReport: Sendable {
             wildfireRisk?.level,
             floodRisk?.level,
             airQualityRisk?.level,
-            earthquakeRisk?.level
+            earthquakeRisk?.level,
+            volcanoRisk?.level
         ].compactMap { $0 }
 
         if levels.contains(.veryHigh) {
@@ -40,6 +42,6 @@ struct PropertyRiskReport: Sendable {
     }
 
     var hasAnyData: Bool {
-        wildfireRisk != nil || floodRisk != nil || airQualityRisk != nil || earthquakeRisk != nil
+        wildfireRisk != nil || floodRisk != nil || airQualityRisk != nil || earthquakeRisk != nil || volcanoRisk != nil
     }
 }
