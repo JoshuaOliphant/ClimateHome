@@ -11,6 +11,11 @@ class RiskLookupViewModel {
     var errorMessage: String?
     var lastLookupDuration: TimeInterval?
 
+    // Selected MapKit result (when user picks from autocomplete)
+    var selectedSearchResult: AddressSearchResult?
+
+    let addressSearchService = AddressSearchService()
+
     private let geocodingService = GeocodingService()
     private let wildfireService = WildfireService()
     private let floodService = FloodService()
@@ -20,6 +25,12 @@ class RiskLookupViewModel {
         if let key = airNowAPIKey, !key.isEmpty {
             self.airQualityService = AirQualityService(apiKey: key)
         }
+    }
+
+    /// Called when user selects an autocomplete suggestion
+    func selectSearchResult(_ result: AddressSearchResult) {
+        selectedSearchResult = result
+        addressSearchService.clearResults()
     }
 
     @MainActor
@@ -42,9 +53,22 @@ class RiskLookupViewModel {
         )
 
         do {
-            let geocodeStart = Date()
-            let (coordinate, formattedAddress) = try await geocodingService.geocode(address: trimmedAddress)
-            let geocodeTime = Int(Date().timeIntervalSince(geocodeStart) * 1000)
+            let coordinate: Coordinate
+            let formattedAddress: String
+            let geocodeTime: Int
+
+            // Use MapKit coordinates if user selected from autocomplete
+            if let selectedResult = selectedSearchResult {
+                let geocodeStart = Date()
+                (coordinate, formattedAddress) = try await addressSearchService.getCoordinate(for: selectedResult)
+                geocodeTime = Int(Date().timeIntervalSince(geocodeStart) * 1000)
+                selectedSearchResult = nil // Clear after use
+            } else {
+                // Fall back to Census Bureau geocoding for manual entry
+                let geocodeStart = Date()
+                (coordinate, formattedAddress) = try await geocodingService.geocode(address: trimmedAddress)
+                geocodeTime = Int(Date().timeIntervalSince(geocodeStart) * 1000)
+            }
 
             report = PropertyRiskReport(
                 address: addressInput,

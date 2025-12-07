@@ -15,7 +15,12 @@ struct ContentView: View {
                     AddressInputView(
                         address: $viewModel.addressInput,
                         isLoading: viewModel.isLoading,
+                        searchService: viewModel.addressSearchService,
                         onSubmit: {
+                            Task { await viewModel.performLookup() }
+                        },
+                        onSelectResult: { result in
+                            viewModel.selectSearchResult(result)
                             Task { await viewModel.performLookup() }
                         }
                     )
