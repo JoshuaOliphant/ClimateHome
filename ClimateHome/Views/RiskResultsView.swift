@@ -38,7 +38,9 @@ struct RiskResultsView: View {
                         icon: "flame.fill",
                         level: wildfire.level,
                         summary: wildfire.summary,
-                        source: wildfire.dataSource
+                        source: wildfire.dataSource,
+                        whatThisMeans: wildfire.whatThisMeans,
+                        questionsToAsk: wildfire.questionsToAsk
                     )
                 }
 
@@ -48,7 +50,9 @@ struct RiskResultsView: View {
                         icon: "drop.fill",
                         level: flood.level,
                         summary: flood.summary,
-                        source: flood.dataSource
+                        source: flood.dataSource,
+                        whatThisMeans: flood.whatThisMeans,
+                        questionsToAsk: flood.questionsToAsk
                     )
                 }
 
@@ -58,7 +62,9 @@ struct RiskResultsView: View {
                         icon: "waveform.path.ecg",
                         level: earthquake.level,
                         summary: earthquake.summary,
-                        source: earthquake.dataSource
+                        source: earthquake.dataSource,
+                        whatThisMeans: earthquake.whatThisMeans,
+                        questionsToAsk: earthquake.questionsToAsk
                     )
                 }
 
@@ -68,7 +74,9 @@ struct RiskResultsView: View {
                         icon: "mountain.2.fill",
                         level: volcano.level,
                         summary: volcano.summary,
-                        source: volcano.dataSource
+                        source: volcano.dataSource,
+                        whatThisMeans: volcano.whatThisMeans,
+                        questionsToAsk: volcano.questionsToAsk
                     )
                 }
 
@@ -78,7 +86,9 @@ struct RiskResultsView: View {
                         icon: "aqi.medium",
                         level: air.level,
                         summary: air.summary,
-                        source: air.dataSource
+                        source: air.dataSource,
+                        whatThisMeans: air.whatThisMeans,
+                        questionsToAsk: air.questionsToAsk
                     )
                 }
             }
