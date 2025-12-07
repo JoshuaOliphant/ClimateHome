@@ -19,6 +19,7 @@ class RiskLookupViewModel {
     private let geocodingService = GeocodingService()
     private let wildfireService = WildfireService()
     private let floodService = FloodService()
+    private let earthquakeService = EarthquakeService()
     private var airQualityService: AirQualityService?
 
     init(airNowAPIKey: String? = nil) {
@@ -111,6 +112,15 @@ class RiskLookupViewModel {
                 }
             }
 
+            group.addTask {
+                do {
+                    let result = try await self.earthquakeService.checkLiquefaction(at: coordinate)
+                    return .earthquake(result)
+                } catch {
+                    return .error("Earthquake: \(error.localizedDescription)")
+                }
+            }
+
             if let airService = self.airQualityService {
                 group.addTask {
                     do {
@@ -128,6 +138,8 @@ class RiskLookupViewModel {
                     report.wildfireRisk = data
                 case .flood(let data):
                     report.floodRisk = data
+                case .earthquake(let data):
+                    report.earthquakeRisk = data
                 case .airQuality(let data):
                     report.airQualityRisk = data
                 case .error(let message):
@@ -141,6 +153,7 @@ class RiskLookupViewModel {
 private enum RiskQueryResult: Sendable {
     case wildfire(WildfireRiskResult)
     case flood(FloodRiskResult)
+    case earthquake(EarthquakeRiskResult)
     case airQuality(AirQualityRiskResult)
     case error(String)
 }

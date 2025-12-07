@@ -7,6 +7,7 @@ enum RiskLevel: String, CaseIterable, Sendable {
     case low = "Low"
     case moderate = "Moderate"
     case high = "High"
+    case veryHigh = "Very High"
     case unknown = "Unknown"
 
     var color: Color {
@@ -16,6 +17,8 @@ enum RiskLevel: String, CaseIterable, Sendable {
         case .moderate:
             return .yellow
         case .high:
+            return .orange
+        case .veryHigh:
             return .red
         case .unknown:
             return .gray
@@ -29,6 +32,8 @@ enum RiskLevel: String, CaseIterable, Sendable {
         case .moderate:
             return "exclamationmark.triangle.fill"
         case .high:
+            return "exclamationmark.triangle.fill"
+        case .veryHigh:
             return "xmark.octagon.fill"
         case .unknown:
             return "questionmark.circle.fill"
