@@ -1,7 +1,7 @@
 # ClimateHome - Technical Architecture
 
 > **Washington State Climate Risk App for Homebuyers**
-> Native iOS • Swift/SwiftUI • Freemium
+> Native iOS • Swift/SwiftUI • Paid App ($9.99)
 
 ---
 
@@ -14,10 +14,18 @@ ClimateHome is a native iOS application that helps Washington State homebuyers u
 | Decision | Choice |
 |----------|--------|
 | **Geographic Scope** | Washington State (expand later) |
-| **Business Model** | Freemium (5 free lookups/month, premium reports) |
+| **Business Model** | One-time purchase ($9.99) |
 | **Brand Name** | ClimateHome |
 | **Platform** | Native iOS (Swift/SwiftUI) |
 | **Minimum iOS Version** | iOS 17.0 |
+
+### Why One-Time Purchase?
+
+- **Usage pattern** - Homebuyers use intensively for 2-6 months, then rarely again
+- **Zero API costs** - All government APIs are free (FEMA, WA DNR, EPA, Census)
+- **Minimal compute** - iOS app hits APIs directly, no backend needed for core features
+- **Better reviews** - Subscription fatigue leads to 1-star reviews for infrequent-use apps
+- **Simpler architecture** - No auth, quotas, or subscription management needed
 
 ### Market Opportunity
 
@@ -69,42 +77,35 @@ Given Washington's unique hazard profile, ClimateHome covers **5 risk categories
 │  │  Presentation │  │   Domain      │  │    Data       │       │
 │  │    Layer      │  │   Layer       │  │    Layer      │       │
 │  ├───────────────┤  ├───────────────┤  ├───────────────┤       │
-│  │ SwiftUI Views │  │ Use Cases     │  │ Repositories  │       │
-│  │ ViewModels    │  │ Entities      │  │ API Clients   │       │
-│  │ Navigation    │  │ Risk Models   │  │ Local Storage │       │
+│  │ SwiftUI Views │  │ Use Cases     │  │ API Services  │       │
+│  │ ViewModels    │  │ Entities      │  │ Local Storage │       │
+│  │ Navigation    │  │ Risk Models   │  │ Keychain      │       │
 │  └───────────────┘  └───────────────┘  └───────────────┘       │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                    BACKEND API (FastAPI)                        │
-├─────────────────────────────────────────────────────────────────┤
-│  • Aggregates multiple data sources into single response        │
-│  • Caches expensive spatial queries                             │
-│  • Handles user authentication & subscription management        │
-│  • Generates PDF reports                                        │
-│  • Manages lookup quotas                                        │
 └─────────────────────────────────────────────────────────────────┘
                               │
               ┌───────────────┼───────────────┐
               ▼               ▼               ▼
 ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
-│  External APIs  │ │  PostGIS DB     │ │  Redis Cache    │
+│  External APIs  │ │  Bundled Data   │ │  SwiftData      │
 ├─────────────────┤ ├─────────────────┤ ├─────────────────┤
-│ • FEMA NFHL     │ │ • Liquefaction  │ │ • API responses │
-│ • WA DNR WUI    │ │ • Lahar zones   │ │ • Geocoding     │
-│ • EPA AirNow    │ │ • Tsunami zones │ │ • Rate limits   │
-│ • Census Geocode│ │ • User data     │ └─────────────────┘
+│ • FEMA NFHL     │ │ • Liquefaction  │ │ • Saved addrs   │
+│ • WA DNR WUI    │ │ • Lahar zones   │ │ • Search history│
+│ • EPA AirNow    │ │ • Tsunami zones │ │ • Cached results│
+│ • Census Geocode│ │ (GeoJSON files) │ └─────────────────┘
 └─────────────────┘ └─────────────────┘
 ```
 
-### Why Keep a Backend?
+### No Backend Required
 
-1. **Data aggregation** - Single API call returns all risk data
-2. **Spatial queries** - PostGIS queries faster server-side
-3. **Caching** - Repeated lookups don't hit external APIs
-4. **API key security** - Keys stay on server, not in app bundle
-5. **Data updates** - Update datasets without app release
+The one-time purchase model eliminates the need for a backend:
+
+| Concern | Solution |
+|---------|----------|
+| Data aggregation | iOS app calls APIs directly in parallel |
+| Spatial queries | Bundle GeoJSON files, query client-side |
+| API key security | Store in Keychain, obfuscate in binary |
+| Data updates | Ship new GeoJSON with app updates |
+| User accounts | Not needed - no quotas to track |
 
 ---
 
@@ -117,8 +118,7 @@ ClimateHome/
 ├── App/
 │   ├── ClimateHomeApp.swift
 │   └── Configuration/
-│       ├── Environment.swift
-│       └── APIConfiguration.swift
+│       └── APIKeys.swift
 │
 ├── Presentation/
 │   ├── Screens/
@@ -153,34 +153,37 @@ ClimateHome/
 │   │   ├── RiskCategory.swift
 │   │   └── RiskLevel.swift
 │   │
-│   ├── UseCases/
-│   │   ├── GetRiskAssessmentUseCase.swift
-│   │   └── SaveAddressUseCase.swift
-│   │
-│   └── Repositories/
-│       └── RiskRepositoryProtocol.swift
+│   └── UseCases/
+│       ├── GetRiskAssessmentUseCase.swift
+│       └── SaveAddressUseCase.swift
 │
 ├── Data/
-│   ├── Network/
-│   │   ├── APIClient.swift
-│   │   ├── Endpoints/
-│   │   │   └── RiskEndpoint.swift
-│   │   ├── DTOs/
-│   │   │   └── RiskAssessmentDTO.swift
-│   │   └── Mappers/
-│   │       └── RiskAssessmentMapper.swift
+│   ├── Services/
+│   │   ├── GeocodingService.swift
+│   │   ├── FloodService.swift
+│   │   ├── WildfireService.swift
+│   │   ├── AirQualityService.swift
+│   │   ├── EarthquakeService.swift
+│   │   └── VolcanoService.swift
 │   │
 │   ├── Persistence/
 │   │   ├── SwiftDataManager.swift
 │   │   └── Models/
 │   │       └── SavedAddressModel.swift
 │   │
-│   └── Repositories/
-│       └── RiskRepository.swift
+│   ├── BundledData/
+│   │   ├── liquefaction.geojson
+│   │   ├── lahar_zones.geojson
+│   │   └── tsunami_zones.geojson
+│   │
+│   └── Network/
+│       ├── APIClient.swift
+│       └── NetworkError.swift
 │
 ├── Core/
 │   ├── Extensions/
 │   ├── Utilities/
+│   │   └── GeoJSONParser.swift
 │   └── Theme/
 │
 └── Resources/
@@ -195,16 +198,13 @@ ClimateHome/
 | **SwiftUI** | Declarative UI |
 | **SwiftData** | Local persistence |
 | **MapKit** | Address autocomplete |
-| **StoreKit 2** | In-app purchases |
-| **AuthenticationServices** | Sign in with Apple |
 | **Observation** | @Observable view models (iOS 17+) |
 
 ### Dependencies (Swift Package Manager)
 
 | Package | Purpose |
 |---------|---------|
-| **Alamofire** | Networking |
-| **RevenueCat** | Subscription management |
+| None required | URLSession handles all networking |
 
 ---
 
@@ -217,7 +217,7 @@ ClimateHome/
 
 enum RiskLevel: String, CaseIterable, Codable {
     case low, moderate, high, veryHigh
-    
+
     var color: Color {
         switch self {
         case .low: return .green
@@ -226,7 +226,7 @@ enum RiskLevel: String, CaseIterable, Codable {
         case .veryHigh: return .red
         }
     }
-    
+
     var displayName: String {
         switch self {
         case .low: return "Low"
@@ -241,19 +241,19 @@ enum RiskLevel: String, CaseIterable, Codable {
 
 enum RiskCategory: String, CaseIterable, Identifiable, Codable {
     case flood, wildfire, airQuality, earthquake, volcano
-    
+
     var id: String { rawValue }
-    
+
     var icon: String {
         switch self {
-        case .flood: return "🌊"
-        case .wildfire: return "🔥"
-        case .airQuality: return "💨"
-        case .earthquake: return "🏔️"
-        case .volcano: return "🌋"
+        case .flood: return "drop.fill"
+        case .wildfire: return "flame.fill"
+        case .airQuality: return "aqi.medium"
+        case .earthquake: return "waveform.path.ecg"
+        case .volcano: return "mountain.2.fill"
         }
     }
-    
+
     var displayName: String {
         switch self {
         case .flood: return "Flood"
@@ -273,7 +273,6 @@ struct RiskAssessment: Identifiable {
     let overallRisk: RiskLevel
     let risks: [RiskCategory: RiskDetail]
     let timestamp: Date
-    let remainingFreeLookups: Int?
 }
 
 // MARK: - Risk Detail
@@ -301,14 +300,15 @@ struct RiskCardView: View {
     let detail: RiskDetail
     let isExpanded: Bool
     let onTap: () -> Void
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Button(action: onTap) {
                 HStack {
-                    Text(detail.category.icon)
+                    Image(systemName: detail.category.icon)
                         .font(.title2)
-                    
+                        .foregroundStyle(detail.level.color)
+
                     VStack(alignment: .leading, spacing: 2) {
                         Text(detail.category.displayName)
                             .font(.headline)
@@ -316,18 +316,18 @@ struct RiskCardView: View {
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
-                    
+
                     Spacer()
-                    
+
                     RiskLevelBadge(level: detail.level)
-                    
+
                     Image(systemName: "chevron.down")
                         .rotationEffect(.degrees(isExpanded ? 180 : 0))
                 }
                 .padding()
             }
             .buttonStyle(.plain)
-            
+
             if isExpanded {
                 Divider()
                 expandedContent
@@ -337,7 +337,7 @@ struct RiskCardView: View {
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .shadow(color: .black.opacity(0.05), radius: 8, y: 2)
     }
-    
+
     private var expandedContent: some View {
         VStack(alignment: .leading, spacing: 16) {
             // Data Sources
@@ -348,7 +348,7 @@ struct RiskCardView: View {
                     DataSourceRow(source: source)
                 }
             }
-            
+
             // What This Means
             VStack(alignment: .leading, spacing: 8) {
                 Text("What This Means")
@@ -356,7 +356,7 @@ struct RiskCardView: View {
                 Text(detail.whatThisMeans)
                     .font(.subheadline)
             }
-            
+
             // Questions to Ask
             if !detail.questionsToAsk.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
@@ -375,122 +375,40 @@ struct RiskCardView: View {
 
 ---
 
-## ViewModel Layer
-
-```swift
-import Observation
-
-@Observable
-final class RiskResultsViewModel {
-    enum State {
-        case loading
-        case loaded(RiskAssessment)
-        case error(String)
-    }
-    
-    private let address: Address
-    private let riskRepository: RiskRepositoryProtocol
-    
-    var state: State = .loading
-    
-    init(address: Address, riskRepository: RiskRepositoryProtocol = RiskRepository()) {
-        self.address = address
-        self.riskRepository = riskRepository
-    }
-    
-    @MainActor
-    func loadRiskAssessment() async {
-        state = .loading
-        do {
-            let assessment = try await riskRepository.getRiskAssessment(for: address)
-            state = .loaded(assessment)
-        } catch {
-            state = .error(error.localizedDescription)
-        }
-    }
-}
-```
-
----
-
-## Network Layer
-
-```swift
-import Alamofire
-
-final class APIClient {
-    static let shared = APIClient()
-    private let baseURL = URL(string: Environment.apiBaseURL)!
-    
-    func request<T: Decodable>(_ endpoint: Endpoint, responseType: T.Type) async throws -> T {
-        let url = baseURL.appendingPathComponent(endpoint.path)
-        return try await AF.request(url, method: endpoint.method, parameters: endpoint.parameters)
-            .validate()
-            .serializingDecodable(T.self)
-            .value
-    }
-}
-
-enum RiskEndpoint: Endpoint {
-    case getRisk(address: String)
-    
-    var path: String { "/api/risk" }
-    var method: HTTPMethod { .get }
-    var parameters: Parameters? {
-        switch self {
-        case .getRisk(let address): return ["address": address]
-        }
-    }
-}
-```
-
----
-
-## Freemium Model (StoreKit 2)
+## App Store Pricing
 
 | Product ID | Type | Price |
 |------------|------|-------|
-| `com.climatehome.report.single` | Consumable | $4.99 |
-| `com.climatehome.pro.monthly` | Auto-renewable | $9.99/mo |
-| `com.climatehome.pro.yearly` | Auto-renewable | $79.99/yr |
+| App purchase | Paid app | $9.99 |
 
----
-
-## Backend API Endpoints
-
-```
-GET  /api/risk?address={address}     Risk assessment
-POST /api/report                     Generate PDF report
-POST /api/auth/apple                 Sign in with Apple
-GET  /api/user/lookups               Remaining lookups
-POST /api/subscriptions/verify       Verify IAP receipt
-```
+No in-app purchases or subscriptions required.
 
 ---
 
 ## Development Phases
 
-### Phase 1: MVP (3-4 weeks)
-- [ ] Xcode project setup with SPM
-- [ ] API client and networking
-- [ ] Home → Search → Results flow
+### Phase 1: MVP (COMPLETE ✅)
+- [x] Xcode project setup
+- [x] API client and networking (URLSession)
+- [x] Basic search → results flow
+- [x] Flood, wildfire, air quality integration
+- [x] Working PoC with real API data
+
+### Phase 2: Full WA Data
+- [ ] Add earthquake risk (bundle liquefaction GeoJSON)
+- [ ] Add volcano risk (bundle lahar zone GeoJSON)
 - [ ] MapKit address autocomplete
-- [ ] Backend: flood + wildfire endpoints
+- [ ] Expandable risk cards with details
 
-### Phase 2: Full WA Data (2-3 weeks)
-- [ ] All 5 risk categories
-- [ ] PostGIS spatial data import
-- [ ] SwiftData persistence
-- [ ] Offline caching
+### Phase 3: Polish & Persistence
+- [ ] SwiftData for saved addresses
+- [ ] Offline caching of results
+- [ ] Questions to Ask for each risk
+- [ ] External links to official sources
+- [ ] Move API key to Keychain
 
-### Phase 3: Monetization (2-3 weeks)
-- [ ] Sign in with Apple
-- [ ] StoreKit 2 / RevenueCat
-- [ ] Report purchase flow
-- [ ] Subscription management
-
-### Phase 4: Launch (2 weeks)
-- [ ] App Store assets
+### Phase 4: Launch
+- [ ] App Store assets (screenshots, description)
 - [ ] TestFlight beta
 - [ ] Analytics & crash reporting
 - [ ] App Store submission
@@ -499,17 +417,41 @@ POST /api/subscriptions/verify       Verify IAP receipt
 
 ## App Store Info
 
-**Category**: Lifestyle or Reference
+**Category**: Reference or Lifestyle
 
-**Keywords**: climate risk, home buying, flood risk, wildfire, earthquake, washington state, property risk
+**Keywords**: climate risk, home buying, flood risk, wildfire, earthquake, washington state, property risk, natural hazards
 
-**Privacy**: Email, Location, Purchase History collected. No tracking.
+**Privacy**: Location (optional, for current location lookup). No account required. No data collected.
+
+**Price**: $9.99 USD
+
+---
+
+## API Reference
+
+### Live APIs (called directly from iOS app)
+
+| API | Endpoint | Auth |
+|-----|----------|------|
+| Census Geocoding | `geocoding.geo.census.gov/geocoder/locations/onelineaddress` | None |
+| FEMA NFHL | `hazards.fema.gov/arcgis/rest/services/public/NFHL/MapServer/28/query` | None |
+| WA DNR WUI | `gis.dnr.wa.gov/site3/rest/services/Public_Wildfire/WADNR_PUBLIC_WD_WUI/MapServer/identify` | None |
+| EPA AirNow | `www.airnowapi.org/aq/observation/latLong/current/` | Free API key |
+
+### Bundled Data (GeoJSON in app bundle)
+
+| Dataset | Source | Size | Update Frequency |
+|---------|--------|------|------------------|
+| Liquefaction zones | WA DNR | ~5MB | Rare (geological) |
+| Lahar hazard zones | WA DNR/USGS | ~1MB | Rare |
+| Tsunami zones | WA DNR | ~2MB | Rare |
 
 ---
 
 ## Next Steps
 
-1. Create Xcode project with folder structure
-2. Set up SPM dependencies
-3. Build API client with mock data
-4. Implement Home → Search → Results flow
+1. ~~Validate PoC with real APIs~~ ✅
+2. Bundle GeoJSON data for earthquake/volcano
+3. Implement MapKit autocomplete
+4. Add expandable card details
+5. Prepare App Store listing
