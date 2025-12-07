@@ -1,0 +1,98 @@
+[
+  {
+    "session_id": "8bc787f4-feb4-4591-98c2-b26b2e73c12e",
+    "transcript_path": "/Users/joshuaoliphant/.claude/projects/-Users-joshuaoliphant-Library-CloudStorage-Dropbox-swift-workspace-ClimateHome/8bc787f4-feb4-4591-98c2-b26b2e73c12e.jsonl",
+    "cwd": "/Users/joshuaoliphant/Library/CloudStorage/Dropbox/swift_workspace/ClimateHome",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use Bash",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "8bc787f4-feb4-4591-98c2-b26b2e73c12e",
+    "transcript_path": "/Users/joshuaoliphant/.claude/projects/-Users-joshuaoliphant-Library-CloudStorage-Dropbox-swift-workspace-ClimateHome/8bc787f4-feb4-4591-98c2-b26b2e73c12e.jsonl",
+    "cwd": "/Users/joshuaoliphant/Library/CloudStorage/Dropbox/swift_workspace/ClimateHome",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "8bc787f4-feb4-4591-98c2-b26b2e73c12e",
+    "transcript_path": "/Users/joshuaoliphant/.claude/projects/-Users-joshuaoliphant-Library-CloudStorage-Dropbox-swift-workspace-ClimateHome/8bc787f4-feb4-4591-98c2-b26b2e73c12e.jsonl",
+    "cwd": "/Users/joshuaoliphant/Library/CloudStorage/Dropbox/swift_workspace/ClimateHome",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use Bash",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "8bc787f4-feb4-4591-98c2-b26b2e73c12e",
+    "transcript_path": "/Users/joshuaoliphant/.claude/projects/-Users-joshuaoliphant-Library-CloudStorage-Dropbox-swift-workspace-ClimateHome/8bc787f4-feb4-4591-98c2-b26b2e73c12e.jsonl",
+    "cwd": "/Users/joshuaoliphant/Library/CloudStorage/Dropbox/swift_workspace/ClimateHome",
+    "hook_event_name": "Notification",
+    "message": "Claude Code needs your attention",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "8bc787f4-feb4-4591-98c2-b26b2e73c12e",
+    "transcript_path": "/Users/joshuaoliphant/.claude/projects/-Users-joshuaoliphant-Library-CloudStorage-Dropbox-swift-workspace-ClimateHome/8bc787f4-feb4-4591-98c2-b26b2e73c12e.jsonl",
+    "cwd": "/Users/joshuaoliphant/Library/CloudStorage/Dropbox/swift_workspace/ClimateHome",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use Fetch",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "8bc787f4-feb4-4591-98c2-b26b2e73c12e",
+    "transcript_path": "/Users/joshuaoliphant/.claude/projects/-Users-joshuaoliphant-Library-CloudStorage-Dropbox-swift-workspace-ClimateHome/8bc787f4-feb4-4591-98c2-b26b2e73c12e.jsonl",
+    "cwd": "/Users/joshuaoliphant/Library/CloudStorage/Dropbox/swift_workspace/ClimateHome",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use Fetch",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "8bc787f4-feb4-4591-98c2-b26b2e73c12e",
+    "transcript_path": "/Users/joshuaoliphant/.claude/projects/-Users-joshuaoliphant-Library-CloudStorage-Dropbox-swift-workspace-ClimateHome/8bc787f4-feb4-4591-98c2-b26b2e73c12e.jsonl",
+    "cwd": "/Users/joshuaoliphant/Library/CloudStorage/Dropbox/swift_workspace/ClimateHome",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use Web Search",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "8bc787f4-feb4-4591-98c2-b26b2e73c12e",
+    "transcript_path": "/Users/joshuaoliphant/.claude/projects/-Users-joshuaoliphant-Library-CloudStorage-Dropbox-swift-workspace-ClimateHome/8bc787f4-feb4-4591-98c2-b26b2e73c12e.jsonl",
+    "cwd": "/Users/joshuaoliphant/Library/CloudStorage/Dropbox/swift_workspace/ClimateHome",
+    "hook_event_name": "Notification",
+    "message": "Claude Code needs your attention",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "8bc787f4-feb4-4591-98c2-b26b2e73c12e",
+    "transcript_path": "/Users/joshuaoliphant/.claude/projects/-Users-joshuaoliphant-Library-CloudStorage-Dropbox-swift-workspace-ClimateHome/8bc787f4-feb4-4591-98c2-b26b2e73c12e.jsonl",
+    "cwd": "/Users/joshuaoliphant/Library/CloudStorage/Dropbox/swift_workspace/ClimateHome",
+    "hook_event_name": "Notification",
+    "message": "Claude Code needs your attention",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "8bc787f4-feb4-4591-98c2-b26b2e73c12e",
+    "transcript_path": "/Users/joshuaoliphant/.claude/projects/-Users-joshuaoliphant-Library-CloudStorage-Dropbox-swift-workspace-ClimateHome/8bc787f4-feb4-4591-98c2-b26b2e73c12e.jsonl",
+    "cwd": "/Users/joshuaoliphant/Library/CloudStorage/Dropbox/swift_workspace/ClimateHome",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "8bc787f4-feb4-4591-98c2-b26b2e73c12e",
+    "transcript_path": "/Users/joshuaoliphant/.claude/projects/-Users-joshuaoliphant-Library-CloudStorage-Dropbox-swift-workspace-ClimateHome/8bc787f4-feb4-4591-98c2-b26b2e73c12e.jsonl",
+    "cwd": "/Users/joshuaoliphant/Library/CloudStorage/Dropbox/swift_workspace/ClimateHome",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "8bc787f4-feb4-4591-98c2-b26b2e73c12e",
+    "transcript_path": "/Users/joshuaoliphant/.claude/projects/-Users-joshuaoliphant-Library-CloudStorage-Dropbox-swift-workspace-ClimateHome/8bc787f4-feb4-4591-98c2-b26b2e73c12e.jsonl",
+    "cwd": "/Users/joshuaoliphant/Library/CloudStorage/Dropbox/swift_workspace/ClimateHome",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  }
+]
