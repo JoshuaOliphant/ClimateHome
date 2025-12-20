@@ -66,7 +66,7 @@ struct VolcanoRiskResult: Sendable {
     var externalLinks: [ExternalLink] {
         return [
             ExternalLink(title: "USGS Cascades Volcano Observatory", url: URL(string: "https://www.usgs.gov/observatories/cvo")!),
-            ExternalLink(title: "Mt. Rainier Lahar Warning", url: URL(string: "https://www.piercecountywa.gov/6aborwarning")!)
+            ExternalLink(title: "Pierce County Lahar Warning", url: URL(string: "https://www.piercecountywa.gov/5888/Outdoor-Warning-System")!)
         ]
     }
 }
