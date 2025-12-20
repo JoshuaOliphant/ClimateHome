@@ -3,6 +3,12 @@
 
 import SwiftUI
 
+struct ExternalLink: Identifiable, Sendable {
+    let id = UUID()
+    let title: String
+    let url: URL
+}
+
 enum RiskLevel: String, CaseIterable, Sendable {
     case low = "Low"
     case moderate = "Moderate"

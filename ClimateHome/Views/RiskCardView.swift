@@ -11,6 +11,7 @@ struct RiskCardView: View {
     let source: String
     var whatThisMeans: String? = nil
     var questionsToAsk: [String]? = nil
+    var externalLinks: [ExternalLink]? = nil
 
     @State private var showingDetail = false
 
@@ -35,7 +36,8 @@ struct RiskCardView: View {
                 summary: summary,
                 source: source,
                 whatThisMeans: whatThisMeans,
-                questionsToAsk: questionsToAsk
+                questionsToAsk: questionsToAsk,
+                externalLinks: externalLinks
             )
         }
     }
@@ -91,6 +93,7 @@ struct RiskDetailSheet: View {
     let source: String
     let whatThisMeans: String?
     let questionsToAsk: [String]?
+    let externalLinks: [ExternalLink]?
 
     @Environment(\.dismiss) private var dismiss
 
@@ -146,6 +149,30 @@ struct RiskDetailSheet: View {
                                         .font(.body)
                                     Text(question)
                                         .font(.body)
+                                }
+                            }
+                        }
+                    }
+
+                    // External Links
+                    if let links = externalLinks, !links.isEmpty {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Learn More")
+                                .font(.headline)
+                            ForEach(links) { link in
+                                Link(destination: link.url) {
+                                    HStack {
+                                        Image(systemName: "link.circle.fill")
+                                            .foregroundStyle(.blue)
+                                            .font(.body)
+                                        Text(link.title)
+                                            .font(.body)
+                                            .foregroundStyle(.primary)
+                                        Spacer()
+                                        Image(systemName: "arrow.up.right")
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
                                 }
                             }
                         }

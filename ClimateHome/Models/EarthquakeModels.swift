@@ -65,4 +65,12 @@ struct EarthquakeRiskResult: Sendable {
             ]
         }
     }
+
+    /// External links to official earthquake data sources
+    var externalLinks: [ExternalLink] {
+        return [
+            ExternalLink(title: "WA Emergency Management", url: URL(string: "https://mil.wa.gov/earthquake")!),
+            ExternalLink(title: "USGS Earthquake Hazards", url: URL(string: "https://www.usgs.gov/programs/earthquake-hazards")!)
+        ]
+    }
 }

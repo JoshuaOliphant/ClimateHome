@@ -2,9 +2,13 @@
 // ABOUTME: Shows timing data for PoC validation
 
 import SwiftUI
+import SwiftData
 
 struct RiskResultsView: View {
     let report: PropertyRiskReport
+
+    @Environment(\.modelContext) private var modelContext
+    @State private var showingSaveConfirmation = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -28,8 +32,26 @@ struct RiskResultsView: View {
                 Label(report.overallRiskLevel.rawValue, systemImage: report.overallRiskLevel.systemImage)
                     .font(.subheadline.bold())
                     .foregroundStyle(report.overallRiskLevel.color)
+
+                Spacer()
+
+                Button(action: saveAddress) {
+                    Label("Save", systemImage: "bookmark")
+                        .font(.subheadline)
+                }
+                .buttonStyle(.bordered)
             }
             .padding(.vertical, 8)
+
+            if showingSaveConfirmation {
+                HStack {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundStyle(.green)
+                    Text("Property saved")
+                        .font(.caption)
+                }
+                .transition(.opacity)
+            }
 
             VStack(spacing: 12) {
                 if let wildfire = report.wildfireRisk {
@@ -40,7 +62,8 @@ struct RiskResultsView: View {
                         summary: wildfire.summary,
                         source: wildfire.dataSource,
                         whatThisMeans: wildfire.whatThisMeans,
-                        questionsToAsk: wildfire.questionsToAsk
+                        questionsToAsk: wildfire.questionsToAsk,
+                        externalLinks: wildfire.externalLinks
                     )
                 }
 
@@ -52,7 +75,8 @@ struct RiskResultsView: View {
                         summary: flood.summary,
                         source: flood.dataSource,
                         whatThisMeans: flood.whatThisMeans,
-                        questionsToAsk: flood.questionsToAsk
+                        questionsToAsk: flood.questionsToAsk,
+                        externalLinks: flood.externalLinks
                     )
                 }
 
@@ -64,7 +88,8 @@ struct RiskResultsView: View {
                         summary: earthquake.summary,
                         source: earthquake.dataSource,
                         whatThisMeans: earthquake.whatThisMeans,
-                        questionsToAsk: earthquake.questionsToAsk
+                        questionsToAsk: earthquake.questionsToAsk,
+                        externalLinks: earthquake.externalLinks
                     )
                 }
 
@@ -76,7 +101,8 @@ struct RiskResultsView: View {
                         summary: volcano.summary,
                         source: volcano.dataSource,
                         whatThisMeans: volcano.whatThisMeans,
-                        questionsToAsk: volcano.questionsToAsk
+                        questionsToAsk: volcano.questionsToAsk,
+                        externalLinks: volcano.externalLinks
                     )
                 }
 
@@ -88,7 +114,8 @@ struct RiskResultsView: View {
                         summary: air.summary,
                         source: air.dataSource,
                         whatThisMeans: air.whatThisMeans,
-                        questionsToAsk: air.questionsToAsk
+                        questionsToAsk: air.questionsToAsk,
+                        externalLinks: air.externalLinks
                     )
                 }
             }
@@ -107,6 +134,23 @@ struct RiskResultsView: View {
                 .padding()
                 .background(Color.red.opacity(0.1))
                 .cornerRadius(8)
+            }
+        }
+    }
+
+    private func saveAddress() {
+        guard let savedAddress = SavedAddress.from(report) else { return }
+
+        modelContext.insert(savedAddress)
+
+        withAnimation {
+            showingSaveConfirmation = true
+        }
+
+        Task {
+            try? await Task.sleep(for: .seconds(2))
+            withAnimation {
+                showingSaveConfirmation = false
             }
         }
     }

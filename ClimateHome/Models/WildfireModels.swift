@@ -76,4 +76,12 @@ struct WildfireRiskResult: Sendable {
             ]
         }
     }
+
+    /// External links to official wildfire data sources
+    var externalLinks: [ExternalLink] {
+        return [
+            ExternalLink(title: "WA DNR Wildfire Ready", url: URL(string: "https://www.dnr.wa.gov/wildfire")!),
+            ExternalLink(title: "Firewise USA", url: URL(string: "https://www.nfpa.org/firewise")!)
+        ]
+    }
 }

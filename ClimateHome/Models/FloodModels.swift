@@ -60,4 +60,12 @@ struct FloodRiskResult: Sendable {
             ]
         }
     }
+
+    /// External links to official flood data sources
+    var externalLinks: [ExternalLink] {
+        return [
+            ExternalLink(title: "FEMA Flood Map Service", url: URL(string: "https://msc.fema.gov/portal/home")!),
+            ExternalLink(title: "Check Your Flood Zone", url: URL(string: "https://msc.fema.gov/portal/search")!)
+        ]
+    }
 }

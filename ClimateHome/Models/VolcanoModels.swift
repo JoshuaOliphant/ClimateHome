@@ -61,4 +61,12 @@ struct VolcanoRiskResult: Sendable {
             ]
         }
     }
+
+    /// External links to official volcano data sources
+    var externalLinks: [ExternalLink] {
+        return [
+            ExternalLink(title: "USGS Cascades Volcano Observatory", url: URL(string: "https://www.usgs.gov/observatories/cvo")!),
+            ExternalLink(title: "Mt. Rainier Lahar Warning", url: URL(string: "https://www.piercecountywa.gov/6aborwarning")!)
+        ]
+    }
 }

@@ -74,4 +74,12 @@ struct AirQualityRiskResult: Sendable {
             ]
         }
     }
+
+    /// External links to official air quality data sources
+    var externalLinks: [ExternalLink] {
+        return [
+            ExternalLink(title: "EPA AirNow", url: URL(string: "https://www.airnow.gov")!),
+            ExternalLink(title: "Puget Sound Clean Air Agency", url: URL(string: "https://www.pscleanair.gov")!)
+        ]
+    }
 }

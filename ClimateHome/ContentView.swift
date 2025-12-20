@@ -4,7 +4,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var viewModel = RiskLookupViewModel(airNowAPIKey: "3EF833EE-DEEE-49AC-89A4-6512A20E0838")
+    @State private var viewModel = RiskLookupViewModel(airNowAPIKey: APIKeyManager.getAirNowAPIKey())
 
     var body: some View {
         NavigationStack {
@@ -40,6 +40,15 @@ struct ContentView: View {
                 .padding()
             }
             .navigationTitle("ClimateHome")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink {
+                        SavedAddressesView()
+                    } label: {
+                        Label("Saved Properties", systemImage: "bookmark")
+                    }
+                }
+            }
         }
     }
 
