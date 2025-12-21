@@ -47,3 +47,7 @@ Pods/
 
 # AI planning documents
 history/
+
+# Claude Code logs
+logs/
+ClimateHome/logs/
